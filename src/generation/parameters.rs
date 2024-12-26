@@ -45,6 +45,12 @@ impl JsonStructure {
 
         Self { schema }
     }
+
+    /// Creates a JsonStructure from a RootSchema. Warning: Ollama doesn't support $ref in schemas.
+    /// Use JsonStructure::new() instead for automatic subschema inlining.
+    pub fn from_schema(schema: RootSchema) -> Self {
+        Self { schema }
+    }
 }
 
 /// Used to control how long a model stays loaded in memory, by default models are unloaded after 5 minutes of inactivity
