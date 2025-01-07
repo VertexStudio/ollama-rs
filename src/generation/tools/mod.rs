@@ -7,6 +7,7 @@ use std::{error::Error, future::Future};
 use schemars::{gen::SchemaSettings, schema::RootSchema, JsonSchema};
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use serde_json::Value;
+use std::borrow::Cow;
 
 use crate::error::ToolCallError;
 
@@ -79,7 +80,7 @@ impl<A: ToolGroup, B: ToolGroup> ToolGroup for (A, B) {
     }
 }
 
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ToolInfo {
     #[serde(rename = "type")]
     tool_type: ToolType,
@@ -97,24 +98,51 @@ impl ToolInfo {
         Self {
             tool_type: ToolType::Function,
             function: ToolFunctionInfo {
-                name: T::name(),
-                description: T::description(),
+                name: T::name().into(),
+                description: T::description().into(),
                 parameters,
             },
         }
     }
+
+    pub fn from_schema(
+        name: Cow<'static, str>,
+        description: Cow<'static, str>,
+        schema: RootSchema,
+    ) -> Self {
+        Self {
+            tool_type: ToolType::Function,
+            function: ToolFunctionInfo {
+                name: name.into(),
+                description: description.into(),
+                parameters: schema,
+            },
+        }
+    }
+
+    pub fn name(&self) -> &str {
+        &self.function.name
+    }
+
+    pub fn description(&self) -> &str {
+        &self.function.description
+    }
+
+    pub fn parameters(&self) -> &RootSchema {
+        &self.function.parameters
+    }
 }
 
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 enum ToolType {
     Function,
 }
 
-#[derive(Clone, Debug, Serialize)]
-struct ToolFunctionInfo {
-    name: &'static str,
-    description: &'static str,
-    parameters: RootSchema,
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct ToolFunctionInfo {
+    pub name: Cow<'static, str>,
+    pub description: Cow<'static, str>,
+    pub parameters: RootSchema,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -124,8 +152,8 @@ pub struct ToolCall {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ToolCallFunction {
-    name: String,
+    pub name: String,
     // I don't love this (the Value)
     // But fixing it would be a big effort
-    arguments: Value,
+    pub arguments: Value,
 }
