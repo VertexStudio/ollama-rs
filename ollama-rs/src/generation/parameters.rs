@@ -1,6 +1,6 @@
 use schemars::{gen::SchemaSettings, schema::RootSchema};
 pub use schemars::{schema_for, JsonSchema};
-use serde::{Serialize, Serializer};
+use serde::{Deserialize, Serialize, Serializer};
 
 /// The format to return a response in
 #[derive(Debug, Clone)]
@@ -18,7 +18,7 @@ impl Serialize for FormatType {
     {
         match self {
             FormatType::Json => serializer.serialize_str("json"),
-            FormatType::StructuredJson(s) => s.schema.serialize(serializer),
+            FormatType::StructuredJson(s) => s.serialize(serializer),
         }
     }
 }
@@ -29,9 +29,39 @@ impl Serialize for FormatType {
 /// let json_schema = schema_for!(Output);
 /// let serialized: SerializedJsonSchema = json_schema.into();
 /// ```
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct JsonStructure {
     schema: RootSchema,
+}
+
+impl Serialize for JsonStructure {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        use serde::ser::SerializeMap;
+
+        // First serialize to Value to handle the conversion
+        let value = serde_json::to_value(&self.schema).map_err(serde::ser::Error::custom)?;
+
+        // Create a modified version with $defs
+        let mut modified_value = value
+            .as_object()
+            .ok_or_else(|| serde::ser::Error::custom("Schema root must be an object"))?
+            .clone();
+
+        // Replace definitions with $defs if it exists
+        if let Some(definitions) = modified_value.remove("definitions") {
+            modified_value.insert("$defs".to_string(), definitions);
+        }
+
+        // Manually serialize the modified map
+        let mut map = serializer.serialize_map(Some(modified_value.len()))?;
+        for (k, v) in modified_value {
+            map.serialize_entry(&k, &v)?;
+        }
+        map.end()
+    }
 }
 
 impl JsonStructure {
