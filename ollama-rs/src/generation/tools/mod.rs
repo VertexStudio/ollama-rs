@@ -80,7 +80,8 @@ impl<A: ToolGroup, B: ToolGroup> ToolGroup for (A, B) {
     }
 }
 
-#[derive(utoipa::ToSchema, Clone, Debug, Serialize, Deserialize)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ToolInfo {
     #[serde(rename = "type")]
     tool_type: ToolType,
@@ -137,25 +138,29 @@ impl ToolInfo {
     }
 }
 
-#[derive(utoipa::ToSchema, Clone, Debug, Serialize, Deserialize)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 enum ToolType {
     Function,
 }
 
-#[derive(utoipa::ToSchema, Clone, Debug, Serialize, Deserialize)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ToolFunctionInfo {
     pub name: Cow<'static, str>,
     pub description: Cow<'static, str>,
-    #[schema(value_type = Object)]
+    #[cfg_attr(feature = "utoipa", schema(value_type = Object))]
     pub parameters: RootSchema,
 }
 
-#[derive(utoipa::ToSchema, Clone, Debug, Serialize, Deserialize)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ToolCall {
     pub function: ToolCallFunction,
 }
 
-#[derive(utoipa::ToSchema, Clone, Debug, Serialize, Deserialize)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ToolCallFunction {
     pub name: String,
     // I don't love this (the Value)

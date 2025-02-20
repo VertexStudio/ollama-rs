@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(utoipa::ToSchema, Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Image(String);
 
 impl Image {
