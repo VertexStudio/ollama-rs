@@ -170,7 +170,7 @@ impl Ollama {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(utoipa::ToSchema, Debug, Clone, Serialize, Deserialize)]
 pub struct ChatMessageResponse {
     /// The name of the model used for the completion.
     pub model: String,
@@ -184,7 +184,7 @@ pub struct ChatMessageResponse {
     pub final_data: Option<ChatMessageFinalResponseData>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(utoipa::ToSchema, Debug, Clone, Serialize, Deserialize)]
 pub struct ChatMessageFinalResponseData {
     /// Time spent generating the response
     pub total_duration: u64,
@@ -198,7 +198,7 @@ pub struct ChatMessageFinalResponseData {
     pub eval_duration: u64,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(utoipa::ToSchema, Debug, Clone, Serialize, Deserialize)]
 pub struct ChatMessage {
     pub role: MessageRole,
     pub content: String,
@@ -248,7 +248,7 @@ impl ChatMessage {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(utoipa::ToSchema, Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub enum MessageRole {
     #[serde(rename = "user")]
     User,

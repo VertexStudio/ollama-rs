@@ -145,12 +145,12 @@ pub struct ToolFunctionInfo {
     pub parameters: RootSchema,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(utoipa::ToSchema, Clone, Debug, Serialize, Deserialize)]
 pub struct ToolCall {
     pub function: ToolCallFunction,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(utoipa::ToSchema, Clone, Debug, Serialize, Deserialize)]
 pub struct ToolCallFunction {
     pub name: String,
     // I don't love this (the Value)
