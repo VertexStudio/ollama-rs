@@ -120,6 +120,10 @@ impl ToolInfo {
         }
     }
 
+    pub fn function(&self) -> &ToolFunctionInfo {
+        &self.function
+    }
+
     pub fn name(&self) -> &str {
         &self.function.name
     }
