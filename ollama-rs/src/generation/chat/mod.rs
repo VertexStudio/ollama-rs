@@ -170,6 +170,7 @@ impl Ollama {
     }
 }
 
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ChatMessageResponse {
     /// The name of the model used for the completion.
@@ -184,6 +185,7 @@ pub struct ChatMessageResponse {
     pub final_data: Option<ChatMessageFinalResponseData>,
 }
 
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ChatMessageFinalResponseData {
     /// Time spent generating the response
@@ -198,6 +200,7 @@ pub struct ChatMessageFinalResponseData {
     pub eval_duration: u64,
 }
 
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ChatMessage {
     pub role: MessageRole,
@@ -248,6 +251,7 @@ impl ChatMessage {
     }
 }
 
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub enum MessageRole {
     #[serde(rename = "user")]
