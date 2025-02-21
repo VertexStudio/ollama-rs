@@ -141,6 +141,7 @@ impl ToolInfo {
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 #[derive(Clone, Debug, Serialize, Deserialize)]
 enum ToolType {
+    #[serde(rename = "function")]
     Function,
 }
 
