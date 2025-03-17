@@ -1,6 +1,6 @@
 use serde::{Serialize, Serializer};
 
-use crate::generation::{options::GenerationOptions, parameters::KeepAlive};
+use crate::{generation::parameters::KeepAlive, models::ModelOptions};
 
 #[derive(Debug)]
 pub enum EmbeddingsInput {
@@ -53,8 +53,11 @@ pub struct GenerateEmbeddingsRequest {
     #[serde(rename = "model")]
     model_name: String,
     input: EmbeddingsInput,
+    #[serde(skip_serializing_if = "Option::is_none")]
     truncate: Option<bool>,
-    options: Option<GenerationOptions>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    options: Option<ModelOptions>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     keep_alive: Option<KeepAlive>,
 }
 
@@ -67,7 +70,7 @@ impl GenerateEmbeddingsRequest {
         }
     }
 
-    pub fn options(mut self, options: GenerationOptions) -> Self {
+    pub fn options(mut self, options: ModelOptions) -> Self {
         self.options = Some(options);
         self
     }

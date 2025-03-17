@@ -30,8 +30,17 @@ This library was created following the [Ollama API](https://github.com/jmorganca
 
 ```toml
 [dependencies]
-ollama-rs = "0.2.5"
+ollama-rs = "0.2.6"
 ```
+
+If you absolutely want the latest version, you can use the `master` branch by adding the following to your `Cargo.toml` file:
+
+```toml
+[dependencies]
+ollama-rs = { git = "https://github.com/pepperoni21/ollama-rs.git", branch = "master" }
+```
+
+*Note that the `master` branch may not be stable and may contain breaking changes.*
 
 ## Initialization
 
@@ -49,7 +58,7 @@ let ollama = Ollama::new("http://localhost".to_string(), 11434);
 
 ## Usage
 
-Feel free to check the [Chatbot example](https://github.com/pepperoni21/ollama-rs/blob/0.2.5/ollama-rs/examples/basic_chatbot.rs) that shows how to use the library to create a simple chatbot in less than 50 lines of code. You can also check some [other examples](https://github.com/pepperoni21/ollama-rs/tree/0.2.5/ollama-rs/examples).
+Feel free to check the [Chatbot example](https://github.com/pepperoni21/ollama-rs/blob/0.2.6/ollama-rs/examples/basic_chatbot.rs) that shows how to use the library to create a simple chatbot in less than 50 lines of code. You can also check some [other examples](https://github.com/pepperoni21/ollama-rs/tree/0.2.6/ollama-rs/examples).
 
 _These examples use poor error handling for simplicity, but you should handle errors properly in your code._
 
@@ -100,12 +109,12 @@ Same output as above but streamed.
 
 ```rust
 use ollama_rs::generation::completion::GenerationRequest;
-use ollama_rs::generation::options::GenerationOptions;
+use ollama_rs::models::ModelOptions;
 
 let model = "llama2:latest".to_string();
 let prompt = "Why is the sky blue?".to_string();
 
-let options = GenerationOptions::default()
+let options = ModelOptions::default()
     .temperature(0.2)
     .repeat_penalty(1.5)
     .top_k(25)
@@ -151,7 +160,7 @@ if let Ok(res) = res {
 }
 ```
 
-_Check chat with history examples for [default](https://github.com/pepperoni21/ollama-rs/blob/0.2.5/ollama-rs/examples/chat_with_history.rs) and [stream](https://github.com/pepperoni21/ollama-rs/blob/0.2.5/ollama-rs/examples/chat_with_history_stream.rs)_
+_Check chat with history examples for [default](https://github.com/pepperoni21/ollama-rs/blob/0.2.6/ollama-rs/examples/chat_with_history.rs) and [stream](https://github.com/pepperoni21/ollama-rs/blob/0.2.6/ollama-rs/examples/chat_with_history_stream.rs)_
 
 ### List Local Models
 
@@ -235,14 +244,14 @@ _Returns a `GenerateEmbeddingsResponse` struct containing the embeddings (a vect
 use ollama_rs::coordinator::Coordinator;
 use ollama_rs::generation::chat::{ChatMessage, ChatMessageRequest};
 use ollama_rs::generation::tools::implementations::{DDGSearcher, Scraper, Calculator};
-use ollama_rs::generation::options::GenerationOptions;
+use ollama_rs::models::ModelOptions;
 use ollama_rs::tool_group;
 
 let tools = tool_group![DDGSearcher::new(), Scraper {}, Calculator {}];
 let mut history = vec![];
 
 let mut coordinator = Coordinator::new_with_tools(ollama, "qwen2.5:32b".to_string(), history, tools)
-    .options(GenerationOptions::default().num_ctx(16384));
+    .options(ModelOptions::default().num_ctx(16384));
 
 let resp = coordinator
     .chat(vec![ChatMessage::user("What is the current oil price?")])
@@ -273,4 +282,4 @@ To create a custom tool, define a function that returns a `Result<String, Box<dy
 
 Ensure that the doc comment above the function clearly describes the tool's purpose and its parameters. This information will be provided to the LLM to help it understand how to use the tool.
 
-For a more detailed example, see the [function call example](https://github.com/pepperoni21/ollama-rs/blob/0.2.5/ollama-rs/examples/function_call.rs).
+For a more detailed example, see the [function call example](https://github.com/pepperoni21/ollama-rs/blob/0.2.6/ollama-rs/examples/function_call.rs).

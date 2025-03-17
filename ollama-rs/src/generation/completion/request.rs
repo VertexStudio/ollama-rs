@@ -2,10 +2,12 @@ use std::borrow::Cow;
 
 use serde::Serialize;
 
-use crate::generation::{
-    images::Image,
-    options::GenerationOptions,
-    parameters::{FormatType, KeepAlive},
+use crate::{
+    generation::{
+        images::Image,
+        parameters::{FormatType, KeepAlive},
+    },
+    models::ModelOptions,
 };
 
 use super::GenerationContext;
@@ -16,14 +18,20 @@ pub struct GenerationRequest<'a> {
     #[serde(rename = "model")]
     pub model_name: String,
     pub prompt: Cow<'a, str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub suffix: Option<Cow<'a, str>>,
     pub images: Vec<Image>,
-    pub options: Option<GenerationOptions>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub options: Option<ModelOptions>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub system: Option<Cow<'a, str>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub template: Option<Cow<'a, str>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub context: Option<GenerationContext>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub format: Option<FormatType>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub keep_alive: Option<KeepAlive>,
     pub(crate) stream: bool,
 }
@@ -71,7 +79,7 @@ impl<'a> GenerationRequest<'a> {
     }
 
     /// Additional model parameters listed in the documentation for the Modelfile
-    pub fn options(mut self, options: GenerationOptions) -> Self {
+    pub fn options(mut self, options: ModelOptions) -> Self {
         self.options = Some(options);
         self
     }
