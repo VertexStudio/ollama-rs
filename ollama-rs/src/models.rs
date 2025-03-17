@@ -58,6 +58,7 @@ pub struct ModelInfo {
 
 // Options for generation requests to Ollama.
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 pub struct ModelOptions {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mirostat: Option<u8>,
