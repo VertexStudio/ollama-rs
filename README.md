@@ -6,23 +6,28 @@ This library was created following the [Ollama API](https://github.com/jmorganca
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Initialization](#initialization)
-- [Usage](#usage)
-  - [Completion Generation](#completion-generation)
-  - [Completion Generation (Streaming)](#completion-generation-streaming)
-  - [Completion Generation (With Options)](#completion-generation-with-options)
-  - [Chat Mode](#chat-mode)
-  - [List Local Models](#list-local-models)
-  - [Show Model Information](#show-model-information)
-  - [Create a Model](#create-a-model)
-  - [Create a Model (Streaming)](#create-a-model-streaming)
-  - [Copy a Model](#copy-a-model)
-  - [Delete a Model](#delete-a-model)
-  - [Generate Embeddings](#generate-embeddings)
-  - [Generate Embeddings (Batch)](#generate-embeddings-batch)
-  - [Make a Function Call](#make-a-function-call)
-  - [Create a custom tool](#create-a-custom-tool)
+- [Ollama-rs](#ollama-rs)
+  - [A simple and easy-to-use library for interacting with the Ollama API.](#a-simple-and-easy-to-use-library-for-interacting-with-the-ollama-api)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+    - [Add ollama-rs to your Cargo.toml](#add-ollama-rs-to-your-cargotoml)
+  - [Initialization](#initialization)
+    - [Initialize Ollama](#initialize-ollama)
+  - [Usage](#usage)
+    - [Completion Generation](#completion-generation)
+    - [Completion Generation (Streaming)](#completion-generation-streaming)
+    - [Completion Generation (With Options)](#completion-generation-with-options)
+    - [Chat Mode](#chat-mode)
+    - [List Local Models](#list-local-models)
+    - [Show Model Information](#show-model-information)
+    - [Create a Model](#create-a-model)
+    - [Create a Model (Streaming)](#create-a-model-streaming)
+    - [Copy a Model](#copy-a-model)
+    - [Delete a Model](#delete-a-model)
+    - [Generate Embeddings](#generate-embeddings)
+    - [Generate Embeddings (Batch)](#generate-embeddings-batch)
+    - [Make a Function Call](#make-a-function-call)
+    - [Create a custom tool](#create-a-custom-tool)
 
 ## Installation
 
@@ -30,7 +35,7 @@ This library was created following the [Ollama API](https://github.com/jmorganca
 
 ```toml
 [dependencies]
-ollama-rs = "0.2.6"
+ollama-rs = "0.3.0"
 ```
 
 If you absolutely want the latest version, you can use the `master` branch by adding the following to your `Cargo.toml` file:
@@ -40,7 +45,7 @@ If you absolutely want the latest version, you can use the `master` branch by ad
 ollama-rs = { git = "https://github.com/pepperoni21/ollama-rs.git", branch = "master" }
 ```
 
-*Note that the `master` branch may not be stable and may contain breaking changes.*
+_Note that the `master` branch may not be stable and may contain breaking changes._
 
 ## Initialization
 
@@ -58,7 +63,7 @@ let ollama = Ollama::new("http://localhost".to_string(), 11434);
 
 ## Usage
 
-Feel free to check the [Chatbot example](https://github.com/pepperoni21/ollama-rs/blob/0.2.6/ollama-rs/examples/basic_chatbot.rs) that shows how to use the library to create a simple chatbot in less than 50 lines of code. You can also check some [other examples](https://github.com/pepperoni21/ollama-rs/tree/0.2.6/ollama-rs/examples).
+Feel free to check the [Chatbot example](https://github.com/pepperoni21/ollama-rs/blob/0.3.0/ollama-rs/examples/basic_chatbot.rs) that shows how to use the library to create a simple chatbot in less than 50 lines of code. You can also check some [other examples](https://github.com/pepperoni21/ollama-rs/tree/0.3.0/ollama-rs/examples).
 
 _These examples use poor error handling for simplicity, but you should handle errors properly in your code._
 
@@ -160,7 +165,7 @@ if let Ok(res) = res {
 }
 ```
 
-_Check chat with history examples for [default](https://github.com/pepperoni21/ollama-rs/blob/0.2.6/ollama-rs/examples/chat_with_history.rs) and [stream](https://github.com/pepperoni21/ollama-rs/blob/0.2.6/ollama-rs/examples/chat_with_history_stream.rs)_
+_Check chat with history examples for [default](https://github.com/pepperoni21/ollama-rs/blob/0.3.0/ollama-rs/examples/chat_with_history.rs) and [stream](https://github.com/pepperoni21/ollama-rs/blob/0.3.0/ollama-rs/examples/chat_with_history_stream.rs)_
 
 ### List Local Models
 
@@ -245,13 +250,14 @@ use ollama_rs::coordinator::Coordinator;
 use ollama_rs::generation::chat::{ChatMessage, ChatMessageRequest};
 use ollama_rs::generation::tools::implementations::{DDGSearcher, Scraper, Calculator};
 use ollama_rs::models::ModelOptions;
-use ollama_rs::tool_group;
 
-let tools = tool_group![DDGSearcher::new(), Scraper {}, Calculator {}];
 let mut history = vec![];
 
-let mut coordinator = Coordinator::new_with_tools(ollama, "qwen2.5:32b".to_string(), history, tools)
-    .options(ModelOptions::default().num_ctx(16384));
+let mut coordinator = Coordinator::new(ollama, "qwen2.5:32b".to_string(), history)
+    .options(ModelOptions::default().num_ctx(16384))
+    .add_tool(DDGSearcher::new())
+    .add_tool(Scraper {})
+    .add_tool(Calculator {});
 
 let resp = coordinator
     .chat(vec![ChatMessage::user("What is the current oil price?")])
@@ -282,4 +288,4 @@ To create a custom tool, define a function that returns a `Result<String, Box<dy
 
 Ensure that the doc comment above the function clearly describes the tool's purpose and its parameters. This information will be provided to the LLM to help it understand how to use the tool.
 
-For a more detailed example, see the [function call example](https://github.com/pepperoni21/ollama-rs/blob/0.2.6/ollama-rs/examples/function_call.rs).
+For a more detailed example, see the [function call example](https://github.com/pepperoni21/ollama-rs/blob/0.3.0/ollama-rs/examples/function_call.rs).

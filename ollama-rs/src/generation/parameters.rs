@@ -76,6 +76,10 @@ impl JsonStructure {
         Self { schema }
     }
 
+    pub fn new_for_schema(schema: RootSchema) -> Self {
+        Self { schema }
+    }
+
     /// Creates a JsonStructure from a RootSchema. Warning: Ollama doesn't support $ref in schemas.
     /// Use JsonStructure::new() instead for automatic subschema inlining.
     pub fn from_schema(schema: RootSchema) -> Self {
@@ -121,7 +125,7 @@ impl TimeUnit {
         match self {
             TimeUnit::Seconds => "s",
             TimeUnit::Minutes => "m",
-            TimeUnit::Hours => "hr",
+            TimeUnit::Hours => "h",
         }
     }
 }
