@@ -60,37 +60,37 @@ pub struct ModelInfo {
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ModelOptions {
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) mirostat: Option<u8>,
+    pub mirostat: Option<u8>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) mirostat_eta: Option<f32>,
+    pub mirostat_eta: Option<f32>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) mirostat_tau: Option<f32>,
+    pub mirostat_tau: Option<f32>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) num_ctx: Option<u64>,
+    pub num_ctx: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) num_gqa: Option<u32>,
+    pub num_gqa: Option<u32>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) num_gpu: Option<u32>,
+    pub num_gpu: Option<u32>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) num_thread: Option<u32>,
+    pub num_thread: Option<u32>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) repeat_last_n: Option<i32>,
+    pub repeat_last_n: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) repeat_penalty: Option<f32>,
+    pub repeat_penalty: Option<f32>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) temperature: Option<f32>,
+    pub temperature: Option<f32>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) seed: Option<i32>,
+    pub seed: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) stop: Option<Vec<String>>,
+    pub stop: Option<Vec<String>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) tfs_z: Option<f32>,
+    pub tfs_z: Option<f32>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) num_predict: Option<i32>,
+    pub num_predict: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) top_k: Option<u32>,
+    pub top_k: Option<u32>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) top_p: Option<f32>,
+    pub top_p: Option<f32>,
 }
 
 impl ModelOptions {
