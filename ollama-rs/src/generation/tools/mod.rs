@@ -118,12 +118,14 @@ pub struct ToolFunctionInfo {
 }
 
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+#[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ToolCall {
     pub function: ToolCallFunction,
 }
 
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+#[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ToolCallFunction {
     pub name: String,
