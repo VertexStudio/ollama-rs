@@ -50,6 +50,7 @@ tool-implementations = ["scraper", "text-splitter", "regex", "calc", "html2md"]
 macros = ["ollama-rs-macros"]
 modelfile = ["dep:modelfile", "dep:serde_with"]
 utoipa = ["dep:utoipa"]
+json-schema = []
 
 [dev-dependencies]
 tokio = { version = "1", features = ["full"] }

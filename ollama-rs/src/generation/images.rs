@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+#[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Image(String);
 

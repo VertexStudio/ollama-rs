@@ -245,6 +245,7 @@ pub struct ChatMessageFinalResponseData {
 }
 
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+#[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ChatMessage {
     pub role: MessageRole,
@@ -297,6 +298,7 @@ impl ChatMessage {
 }
 
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+#[cfg_attr(feature = "json-schema", derive(schemars::JsonSchema))]
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub enum MessageRole {
     #[serde(rename = "user")]
